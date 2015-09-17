@@ -26,8 +26,9 @@ for all Java code in the package.
 ## Building
 
 The build requires Maven and the Android SDK. After deploying
-Android `4.4.2_r4` to an accessible Maven repository, build the
-package with:
+Android `4.4.2_r4` to an accessible Maven repository (using the
+[maven-android-sdk-deployer](https://github.com/simpligility/maven-android-sdk-deployer)),
+build the package with:
 
 ```$ mvn clean package```
 

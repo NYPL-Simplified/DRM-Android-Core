@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/nypl-drm.iml" filepath="$PROJECT_DIR$/nypl-drm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nypl-drm-checkstyle/nypl-drm-checkstyle.iml" filepath="$PROJECT_DIR$/nypl-drm-checkstyle/nypl-drm-checkstyle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nypl-drm-core/nypl-drm-core.iml" filepath="$PROJECT_DIR$/nypl-drm-core/nypl-drm-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/nypl-drm-core-tests/nypl-drm-core-tests.iml" filepath="$PROJECT_DIR$/nypl-drm-core-tests/nypl-drm-core-tests.iml" />
+    </modules>
+  </component>
+</project>

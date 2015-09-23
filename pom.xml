@@ -44,6 +44,13 @@
     </site>
   </distributionManagement>
 
+  <licenses>
+    <license>
+      <name>Apache 2.0 License</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
   <prerequisites>
     <maven>2.2.1</maven>
   </prerequisites>

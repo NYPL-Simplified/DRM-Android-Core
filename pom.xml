@@ -7,7 +7,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.nypl.drm</groupId>
   <artifactId>nypl-drm</artifactId>
-  <version>0.6.0</version>
+  <version>0.6.1</version>
 
   <packaging>pom</packaging>
   <description>NYPL DRM</description>
@@ -43,6 +43,13 @@
       <url>${project.url}</url>
     </site>
   </distributionManagement>
+
+  <licenses>
+    <license>
+      <name>Apache 2.0 License</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
 
   <prerequisites>
     <maven>2.2.1</maven>

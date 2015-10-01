@@ -6,7 +6,6 @@ import com.io7m.junreachable.UnreachableCodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -43,19 +42,8 @@ public final class AdobeAdeptExecutor implements AdobeAdeptExecutorType
   /**
    * Construct a new executor using the given connector factory and arguments.
    *
-   * @param factory         A connector factory
-   * @param package_name    The application package name
-   * @param package_version The application package version
-   * @param res             A resource provider
-   * @param net             A net provider
-   * @param device_serial   The serial number of the device
-   * @param device_name     The name of the device
-   * @param app_storage     The path to application storage
-   * @param xml_storage     The path to XML storage
-   * @param book_path       The path to fulfilled books
-   * @param temporary_dir   A directory usable for temporary private file
-   *                        storage (such as the per-application Android
-   *                        external cache directory).
+   * @param factory A connector factory
+   * @param p       Connector parameters
    *
    * @return A new executor
    *
@@ -67,29 +55,11 @@ public final class AdobeAdeptExecutor implements AdobeAdeptExecutorType
 
   public static AdobeAdeptExecutorType newExecutor(
     final AdobeAdeptConnectorFactoryType factory,
-    final String package_name,
-    final String package_version,
-    final AdobeAdeptResourceProviderType res,
-    final AdobeAdeptNetProviderType net,
-    final String device_serial,
-    final String device_name,
-    final File app_storage,
-    final File xml_storage,
-    final File book_path,
-    final File temporary_dir)
+    final AdobeAdeptConnectorParameters p)
     throws DRMException, InterruptedException
   {
     NullCheck.notNull(factory);
-    NullCheck.notNull(package_name);
-    NullCheck.notNull(package_version);
-    NullCheck.notNull(res);
-    NullCheck.notNull(net);
-    NullCheck.notNull(device_serial);
-    NullCheck.notNull(device_name);
-    NullCheck.notNull(app_storage);
-    NullCheck.notNull(xml_storage);
-    NullCheck.notNull(book_path);
-    NullCheck.notNull(temporary_dir);
+    NullCheck.notNull(p);
 
     final ThreadFactory tf = Executors.defaultThreadFactory();
     final ThreadFactory named = new ThreadFactory()
@@ -129,17 +99,7 @@ public final class AdobeAdeptExecutor implements AdobeAdeptExecutorType
           @Override public AdobeAdeptConnectorType call()
             throws Exception
           {
-            return factory.get(
-              package_name,
-              package_version,
-              res,
-              net,
-              device_serial,
-              device_name,
-              app_storage,
-              xml_storage,
-              book_path,
-              temporary_dir);
+            return factory.get(p);
           }
         }).get();
     } catch (final InterruptedException e) {

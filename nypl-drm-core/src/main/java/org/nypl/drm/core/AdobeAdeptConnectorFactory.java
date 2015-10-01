@@ -5,7 +5,6 @@ import com.io7m.jnull.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -95,28 +94,10 @@ public final class AdobeAdeptConnectorFactory
   }
 
   @Override public AdobeAdeptConnectorType get(
-    final String package_name,
-    final String package_version,
-    final AdobeAdeptResourceProviderType res,
-    final AdobeAdeptNetProviderType net,
-    final String device_serial,
-    final String device_name,
-    final File app_storage,
-    final File xml_storage,
-    final File book_path,
-    final File temporary_dir)
+    final AdobeAdeptConnectorParameters p)
     throws DRMException
   {
-    NullCheck.notNull(package_name);
-    NullCheck.notNull(package_version);
-    NullCheck.notNull(res);
-    NullCheck.notNull(net);
-    NullCheck.notNull(device_serial);
-    NullCheck.notNull(device_name);
-    NullCheck.notNull(app_storage);
-    NullCheck.notNull(xml_storage);
-    NullCheck.notNull(book_path);
-    NullCheck.notNull(temporary_dir);
+    NullCheck.notNull(p);
 
     try {
       if (AdobeAdeptConnectorFactory.INSTANCE != null) {
@@ -136,31 +117,11 @@ public final class AdobeAdeptConnectorFactory
         "looking up 'get' method on {}", c);
       final Method gm = c.getMethod(
         "get",
-        String.class,
-        String.class,
-        AdobeAdeptResourceProviderType.class,
-        AdobeAdeptNetProviderType.class,
-        String.class,
-        String.class,
-        File.class,
-        File.class,
-        File.class,
-        File.class);
+        AdobeAdeptConnectorParameters.class);
 
       AdobeAdeptConnectorFactory.LOG.debug("invoking 'get' method on {}", c);
       final AdobeAdeptConnectorType instance = NullCheck.notNull(
-        (AdobeAdeptConnectorType) gm.invoke(
-          null,
-          package_name,
-          package_version,
-          res,
-          net,
-          device_serial,
-          device_name,
-          app_storage,
-          xml_storage,
-          book_path,
-          temporary_dir));
+        (AdobeAdeptConnectorType) gm.invoke(null, p));
 
       AdobeAdeptConnectorFactory.INSTANCE = instance;
       AdobeAdeptConnectorFactory.LOG.debug("returning fresh instance");

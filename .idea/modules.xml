@@ -2,10 +2,17 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../DRM-Android-Adobe/libnypl_adobe/libnypl_adobe.iml" filepath="$PROJECT_DIR$/../DRM-Android-Adobe/libnypl_adobe/libnypl_adobe.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../DRM-Android-Adobe/libnypl_adobe_filter/libnypl_adobe_filter.iml" filepath="$PROJECT_DIR$/../DRM-Android-Adobe/libnypl_adobe_filter/libnypl_adobe_filter.iml" />
       <module fileurl="file://$PROJECT_DIR$/nypl-drm.iml" filepath="$PROJECT_DIR$/nypl-drm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../DRM-Android-Adobe/nypl-drm-adobe.iml" filepath="$PROJECT_DIR$/../DRM-Android-Adobe/nypl-drm-adobe.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../DRM-Android-Adobe/nypl-drm-adobe-provider/nypl-drm-adobe-provider.iml" filepath="$PROJECT_DIR$/../DRM-Android-Adobe/nypl-drm-adobe-provider/nypl-drm-adobe-provider.iml" />
       <module fileurl="file://$PROJECT_DIR$/nypl-drm-checkstyle/nypl-drm-checkstyle.iml" filepath="$PROJECT_DIR$/nypl-drm-checkstyle/nypl-drm-checkstyle.iml" />
       <module fileurl="file://$PROJECT_DIR$/nypl-drm-core/nypl-drm-core.iml" filepath="$PROJECT_DIR$/nypl-drm-core/nypl-drm-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/nypl-drm-core-tests/nypl-drm-core-tests.iml" filepath="$PROJECT_DIR$/nypl-drm-core-tests/nypl-drm-core-tests.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../DRM-Android-Examples/nypl-drm-examples.iml" filepath="$PROJECT_DIR$/../DRM-Android-Examples/nypl-drm-examples.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../DRM-Android-Examples/nypl-drm-examples-adobe/nypl-drm-examples-adobe.iml" filepath="$PROJECT_DIR$/../DRM-Android-Examples/nypl-drm-examples-adobe/nypl-drm-examples-adobe.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../DRM-Android-Examples/nypl-drm-examples-file-dialog/nypl-drm-examples-file-dialog.iml" filepath="$PROJECT_DIR$/../DRM-Android-Examples/nypl-drm-examples-file-dialog/nypl-drm-examples-file-dialog.iml" />
     </modules>
   </component>
 </project>

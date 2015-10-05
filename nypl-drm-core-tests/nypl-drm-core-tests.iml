@@ -34,7 +34,7 @@
       <excludeFolder url="file://$MODULE_DIR$/target/screenshots" />
       <excludeFolder url="file://$MODULE_DIR$/target/surefire-reports" />
     </content>
-    <orderEntry type="jdk" jdkName="Maven Android API 19 Platform" jdkType="Android SDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="nypl-drm-core" />
     <orderEntry type="library" name="Maven: com.io7m.jnull:io7m-jnull-core:1.0.1" level="project" />

@@ -20,6 +20,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p> The default implementation of the {@link
@@ -111,8 +112,10 @@ public final class AdobeAdeptJoinAccountDispatcher
       "making POST request to: {} with query {}", url, query);
 
     final HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-    conn.setReadTimeout(10000);
-    conn.setConnectTimeout(15000);
+    conn.setReadTimeout(
+      (int) TimeUnit.MILLISECONDS.convert(60L, TimeUnit.SECONDS));
+    conn.setConnectTimeout(
+      (int) TimeUnit.MILLISECONDS.convert(60L, TimeUnit.SECONDS));
     conn.setRequestMethod("POST");
     conn.setDoInput(true);
     conn.setDoOutput(true);

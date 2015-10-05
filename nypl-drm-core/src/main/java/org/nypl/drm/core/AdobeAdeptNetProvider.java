@@ -14,6 +14,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -89,7 +90,10 @@ import java.util.concurrent.atomic.AtomicInteger;
       conn.setInstanceFollowRedirects(true);
       conn.setRequestMethod(method);
       conn.setDoInput(true);
-      conn.setReadTimeout(10000);
+      conn.setConnectTimeout(
+        (int) TimeUnit.MILLISECONDS.convert(60L, TimeUnit.SECONDS));
+      conn.setReadTimeout(
+        (int) TimeUnit.MILLISECONDS.convert(60L, TimeUnit.SECONDS));
       conn.setRequestProperty("User-Agent", this.user_agent);
       conn.setRequestProperty("Accept-Encoding", "identity");
 

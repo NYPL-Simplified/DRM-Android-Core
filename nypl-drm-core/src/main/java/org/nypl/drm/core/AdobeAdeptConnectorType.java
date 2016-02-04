@@ -36,6 +36,22 @@ public interface AdobeAdeptConnectorType
     String password);
 
   /**
+   * Authorize the current device with a token.
+   *
+   * @param client   The DRM client that will be notified of progress and
+   *                 errors
+   * @param vendor   The Adobe Vendor ID
+   * @param user     The user name (not sent to Adobe)
+   * @param token    The token
+   */
+
+  void activateDeviceToken(
+      AdobeAdeptActivationReceiverType client,
+      AdobeVendorID vendor,
+      String user,
+      String token);
+
+  /**
    * Remove an activation with the given details for the current device.
    *
    * @param client    The receiver

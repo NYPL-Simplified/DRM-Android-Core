@@ -5,7 +5,7 @@ import com.io7m.jnull.NullCheck;
 /**
  * <p>An Adobe device ID, typically in {@code urn:} form. This is <i>not</i> an
  * "Adobe ID", but is the internal representation that Adobe use to represent
- * user identifiers. These are exposed to the programmer via on-disk device
+ * device identifiers. These are exposed to the programmer via on-disk device
  * activation records, or when attempting to join accounts.</p>
  *
  * <p>This type exists to reduce the "everything is a string" aspect of the

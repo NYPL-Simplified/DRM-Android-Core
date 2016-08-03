@@ -30,7 +30,7 @@ public final class AdobeDeviceID
   }
 
   /**
-   * @return The raw user ID value
+   * @return The raw device ID value
    */
 
   public String getValue()

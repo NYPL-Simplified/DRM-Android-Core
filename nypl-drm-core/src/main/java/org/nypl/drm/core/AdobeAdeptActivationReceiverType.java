@@ -33,7 +33,7 @@ public interface AdobeAdeptActivationReceiverType
   void onActivation(
     final int index,
     final AdobeVendorID authority,
-    final String device_id,
+    final AdobeDeviceID device_id,
     final String user_name,
     final AdobeUserID user_id,
     final @Nullable String expires);

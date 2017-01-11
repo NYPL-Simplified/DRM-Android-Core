@@ -25,15 +25,30 @@ public interface AdobeAdeptConnectorType
    * @param client   The DRM client that will be notified of progress and
    *                 errors
    * @param vendor   The Adobe Vendor ID
-   * @param user     The user name
+   * @param user_name     The user name
    * @param password The password
    */
 
   void activateDevice(
     AdobeAdeptActivationReceiverType client,
     AdobeVendorID vendor,
-    String user,
+    String user_name,
     String password);
+
+
+  /**
+   * @param client   The DRM client that will be notified of progress and
+   *                 errors
+   * @param vendor   The Adobe Vendor ID
+   * @param user_name     The user name
+   * @param token    The client token
+   */
+  void activateDeviceToken(
+    AdobeAdeptActivationReceiverType client,
+    AdobeVendorID vendor,
+    String user_name,
+    String token);
+
 
 
   /**
@@ -45,7 +60,6 @@ public interface AdobeAdeptConnectorType
    * @param user_name The user name
    * @param password  The password
    */
-
   void deactivateDevice(
     AdobeAdeptDeactivationReceiverType client,
     AdobeVendorID vendor,

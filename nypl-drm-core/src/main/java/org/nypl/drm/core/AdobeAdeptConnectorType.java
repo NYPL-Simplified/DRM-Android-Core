@@ -91,11 +91,13 @@ public interface AdobeAdeptConnectorType
    *
    * @param listener The result listener
    * @param acsm     The ACSM data
+   * @param user     The Adobe User ID
    */
 
   void fulfillACSM(
     AdobeAdeptFulfillmentListenerType listener,
-    byte[] acsm);
+    byte[] acsm,
+    AdobeUserID user);
 
   /**
    * Attempt to join the account {@code user} with the currently activated
@@ -114,9 +116,11 @@ public interface AdobeAdeptConnectorType
    *
    * @param listener The result listener
    * @param loan_id  The loan ID
+   * @param user     The Adobe User ID
    */
 
   void loanReturn(
     AdobeAdeptLoanReturnListenerType listener,
-    AdobeLoanID loan_id);
+    AdobeLoanID loan_id,
+    AdobeUserID user);
 }

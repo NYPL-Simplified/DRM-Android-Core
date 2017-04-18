@@ -5,8 +5,7 @@ import java.io.File;
 /**
  * The type of listeners that receive the results of fulfillment operations.
  *
- * @see AdobeAdeptConnectorType#fulfillACSM(AdobeAdeptFulfillmentListenerType,
- * byte[])
+ * @see AdobeAdeptConnectorType#fulfillACSM(AdobeAdeptFulfillmentListenerType, byte[], AdobeUserID)
  */
 
 public interface AdobeAdeptFulfillmentListenerType

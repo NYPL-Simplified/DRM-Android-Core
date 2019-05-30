@@ -1,6 +1,6 @@
 package org.nypl.drm.core;
 
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 import com.io7m.junreachable.UnreachableCodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,6 +79,6 @@ public final class AdobeAdeptACSMUtilities
     final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     dbf.setNamespaceAware(true);
     final DocumentBuilder db = dbf.newDocumentBuilder();
-    return NullCheck.notNull(db.parse(s));
+    return Objects.requireNonNull(db.parse(s));
   }
 }

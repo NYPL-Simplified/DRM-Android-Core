@@ -1,6 +1,6 @@
 package org.nypl.drm.core;
 
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +14,7 @@ public final class Assertions
   private static final Logger LOG;
 
   static {
-    LOG = NullCheck.notNull(LoggerFactory.getLogger(Assertions.class));
+    LOG = Objects.requireNonNull(LoggerFactory.getLogger(Assertions.class));
   }
 
   private Assertions()

@@ -1,22 +1,6 @@
-/*
- * Copyright © 2015 <code@io7m.com> http://io7m.com
- *
- * Permission to use, copy, modify, and/or distribute this software for any
- * purpose with or without fee is hereby granted, provided that the above
- * copyright notice and this permission notice appear in all copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
- * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
- * SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
- * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
- * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
- * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- */
-
 package org.nypl.drm.core;
 
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 
 import java.io.File;
 
@@ -72,16 +56,16 @@ public final class AdobeAdeptConnectorParameters
     final File in_temporary_dir,
     final boolean in_logging)
   {
-    this.app_storage = NullCheck.notNull(in_app_storage);
-    this.package_name = NullCheck.notNull(in_package_name);
-    this.package_version = NullCheck.notNull(in_package_version);
-    this.res = NullCheck.notNull(in_res);
-    this.net = NullCheck.notNull(in_net);
-    this.device_serial = NullCheck.notNull(in_device_serial);
-    this.device_name = NullCheck.notNull(in_device_name);
-    this.xml_storage = NullCheck.notNull(in_xml_storage);
-    this.book_path = NullCheck.notNull(in_book_path);
-    this.temporary_dir = NullCheck.notNull(in_temporary_dir);
+    this.app_storage = Objects.requireNonNull(in_app_storage);
+    this.package_name = Objects.requireNonNull(in_package_name);
+    this.package_version = Objects.requireNonNull(in_package_version);
+    this.res = Objects.requireNonNull(in_res);
+    this.net = Objects.requireNonNull(in_net);
+    this.device_serial = Objects.requireNonNull(in_device_serial);
+    this.device_name = Objects.requireNonNull(in_device_name);
+    this.xml_storage = Objects.requireNonNull(in_xml_storage);
+    this.book_path = Objects.requireNonNull(in_book_path);
+    this.temporary_dir = Objects.requireNonNull(in_temporary_dir);
     this.debug_logging = in_logging;
   }
 

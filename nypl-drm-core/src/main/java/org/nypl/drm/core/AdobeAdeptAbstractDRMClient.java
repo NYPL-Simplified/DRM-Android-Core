@@ -1,6 +1,6 @@
 package org.nypl.drm.core;
 
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 import com.io7m.junreachable.UnreachableCodeException;
 import org.slf4j.Logger;
 
@@ -18,7 +18,7 @@ public abstract class AdobeAdeptAbstractDRMClient
 
   protected AdobeAdeptAbstractDRMClient(final Logger in_log)
   {
-    this.log = NullCheck.notNull(in_log);
+    this.log = Objects.requireNonNull(in_log);
   }
 
   @Override public void onCompletelyFinished()

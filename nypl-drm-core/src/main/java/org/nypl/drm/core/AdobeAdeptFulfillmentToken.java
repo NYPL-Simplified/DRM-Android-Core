@@ -1,6 +1,6 @@
 package org.nypl.drm.core;
 
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -36,8 +36,8 @@ public final class AdobeAdeptFulfillmentToken
     final Document in_document,
     final String in_format_text)
   {
-    this.document = NullCheck.notNull(in_document);
-    this.format = NullCheck.notNull(in_format_text);
+    this.document = Objects.requireNonNull(in_document);
+    this.format = Objects.requireNonNull(in_format_text);
   }
 
   /**
@@ -53,7 +53,7 @@ public final class AdobeAdeptFulfillmentToken
   public static AdobeAdeptFulfillmentToken parseFromBytes(final byte[] data)
     throws AdobeAdeptACSMException
   {
-    NullCheck.notNull(data);
+    Objects.requireNonNull(data);
     return AdobeAdeptFulfillmentToken.parseFromStream(
       new ByteArrayInputStream(data));
   }
@@ -71,13 +71,13 @@ public final class AdobeAdeptFulfillmentToken
   public static AdobeAdeptFulfillmentToken parseFromStream(final InputStream s)
     throws AdobeAdeptACSMException
   {
-    NullCheck.notNull(s);
+    Objects.requireNonNull(s);
 
     try {
       final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
       dbf.setNamespaceAware(true);
       final DocumentBuilder db = dbf.newDocumentBuilder();
-      final Document document = NullCheck.notNull(db.parse(s));
+      final Document document = Objects.requireNonNull(db.parse(s));
       return AdobeAdeptFulfillmentToken.parseFromDocument(document);
     } catch (final ParserConfigurationException e) {
       throw new AdobeAdeptACSMException(e);
@@ -102,7 +102,7 @@ public final class AdobeAdeptFulfillmentToken
     final Document document)
     throws AdobeAdeptACSMException
   {
-    NullCheck.notNull(document);
+    Objects.requireNonNull(document);
 
     final Element root = document.getDocumentElement();
     AdobeAdeptFulfillmentToken.checkName(
@@ -141,7 +141,7 @@ public final class AdobeAdeptFulfillmentToken
 
     final Node item = es.item(0);
     if (item instanceof Element) {
-      return NullCheck.notNull((Element) item);
+      return Objects.requireNonNull((Element) item);
     }
 
     final StringBuilder sb = new StringBuilder(256);
@@ -165,8 +165,8 @@ public final class AdobeAdeptFulfillmentToken
     final String name)
     throws AdobeAdeptACSMException
   {
-    final String got_name = NullCheck.notNull(e.getLocalName());
-    final String got_uri = NullCheck.notNull(e.getNamespaceURI());
+    final String got_name = Objects.requireNonNull(e.getLocalName());
+    final String got_uri = Objects.requireNonNull(e.getNamespaceURI());
     final boolean name_ok = name.equals(got_name);
     final boolean uri_ok = uri.toString().equals(got_uri);
     if ((name_ok && uri_ok) == false) {

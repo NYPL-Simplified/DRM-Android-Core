@@ -1,6 +1,6 @@
 package org.nypl.drm.core;
 
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 
 import java.nio.ByteBuffer;
 
@@ -27,8 +27,8 @@ public final class AdobeAdeptLoan
     final ByteBuffer in_serialized,
     final boolean in_returnable)
   {
-    this.loan = NullCheck.notNull(in_loan);
-    this.serialized = NullCheck.notNull(in_serialized);
+    this.loan = Objects.requireNonNull(in_loan);
+    this.serialized = Objects.requireNonNull(in_serialized);
     this.returnable = in_returnable;
   }
 

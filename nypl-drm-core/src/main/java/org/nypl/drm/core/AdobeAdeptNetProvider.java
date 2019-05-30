@@ -1,6 +1,6 @@
 package org.nypl.drm.core;
 
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 import com.io7m.jnull.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
   static {
     LOG =
-      NullCheck.notNull(LoggerFactory.getLogger(AdobeAdeptNetProvider.class));
+      Objects.requireNonNull(LoggerFactory.getLogger(AdobeAdeptNetProvider.class));
   }
 
   private final String        user_agent;
@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicInteger;
   private AdobeAdeptNetProvider(
     final String in_user_agent)
   {
-    this.user_agent = NullCheck.notNull(in_user_agent);
+    this.user_agent = Objects.requireNonNull(in_user_agent);
     this.recursion = new AtomicInteger(0);
     this.want_cancel = new AtomicBoolean(false);
   }
@@ -66,15 +66,15 @@ import java.util.concurrent.atomic.AtomicInteger;
     final @Nullable String post_data_content_type,
     final @Nullable byte[] post_data)
   {
-    NullCheck.notNull(method);
-    NullCheck.notNull(url_text);
+    Objects.requireNonNull(method);
+    Objects.requireNonNull(url_text);
 
     AdobeAdeptNetProvider.LOG.debug(
       "newStream: {} {} {}", method, url_text, client);
 
     PostData pd = null;
     if (post_data != null) {
-      final String ct = NullCheck.notNull(post_data_content_type);
+      final String ct = Objects.requireNonNull(post_data_content_type);
       AdobeAdeptNetProvider.LOG.debug(
         "received {} bytes of POST data of type {}", post_data.length, ct);
       pd = new PostData(ct, post_data);
@@ -83,9 +83,9 @@ import java.util.concurrent.atomic.AtomicInteger;
     }
 
     try {
-      final URL url = NullCheck.notNull(new URL(url_text));
+      final URL url = Objects.requireNonNull(new URL(url_text));
       final HttpURLConnection conn =
-        NullCheck.notNull((HttpURLConnection) url.openConnection());
+        Objects.requireNonNull((HttpURLConnection) url.openConnection());
 
       conn.setInstanceFollowRedirects(true);
       conn.setRequestMethod(method);
@@ -133,8 +133,8 @@ import java.util.concurrent.atomic.AtomicInteger;
       final String in_content_type,
       final byte[] in_data)
     {
-      this.content_type = NullCheck.notNull(in_content_type);
-      this.data = NullCheck.notNull(in_data);
+      this.content_type = Objects.requireNonNull(in_content_type);
+      this.data = Objects.requireNonNull(in_data);
     }
 
     public String getContentType()
@@ -153,7 +153,7 @@ import java.util.concurrent.atomic.AtomicInteger;
     private static final Logger LOG_STREAM;
 
     static {
-      LOG_STREAM = NullCheck.notNull(LoggerFactory.getLogger(Stream.class));
+      LOG_STREAM = Objects.requireNonNull(LoggerFactory.getLogger(Stream.class));
     }
 
     private final           HttpURLConnection          conn;
@@ -170,11 +170,11 @@ import java.util.concurrent.atomic.AtomicInteger;
       final @Nullable PostData in_post_data,
       final AtomicBoolean in_want_cancel)
     {
-      this.conn = NullCheck.notNull(in_conn);
+      this.conn = Objects.requireNonNull(in_conn);
       this.client = in_client;
-      this.recursion = NullCheck.notNull(in_recursion);
+      this.recursion = Objects.requireNonNull(in_recursion);
       this.post_data = in_post_data;
-      this.want_cancel = NullCheck.notNull(in_want_cancel);
+      this.want_cancel = Objects.requireNonNull(in_want_cancel);
 
       Stream.LOG_STREAM.debug("constructed stream with client {}", in_client);
     }
@@ -182,7 +182,7 @@ import java.util.concurrent.atomic.AtomicInteger;
     @Override public void onError(
       final String message)
     {
-      final AdobeAdeptStreamClientType c = NullCheck.notNull(this.client);
+      final AdobeAdeptStreamClientType c = Objects.requireNonNull(this.client);
       c.onError("E_STREAM_ERROR: " + message);
     }
 
@@ -248,11 +248,11 @@ import java.util.concurrent.atomic.AtomicInteger;
             this.content_length);
 
         } catch (final IOException e) {
-          final AdobeAdeptStreamClientType c = NullCheck.notNull(this.client);
+          final AdobeAdeptStreamClientType c = Objects.requireNonNull(this.client);
           c.onError(
             "E_STREAM_ERROR " + e.getMessage());
         } catch (final CancelledDownloadException e) {
-          final AdobeAdeptStreamClientType c = NullCheck.notNull(this.client);
+          final AdobeAdeptStreamClientType c = Objects.requireNonNull(this.client);
           c.onError("E_NYPL_CANCELLED");
         } finally {
           try {
@@ -260,7 +260,7 @@ import java.util.concurrent.atomic.AtomicInteger;
               is.close();
             }
           } catch (final IOException e) {
-            final AdobeAdeptStreamClientType c = NullCheck.notNull(this.client);
+            final AdobeAdeptStreamClientType c = Objects.requireNonNull(this.client);
             c.onError(
               "E_STREAM_ERROR " + e.getMessage());
           }
@@ -313,7 +313,7 @@ import java.util.concurrent.atomic.AtomicInteger;
         Stream.LOG_STREAM.debug("onRequestInfo: response code {}", code);
 
         if (code != HttpURLConnection.HTTP_OK) {
-          final AdobeAdeptStreamClientType c = NullCheck.notNull(this.client);
+          final AdobeAdeptStreamClientType c = Objects.requireNonNull(this.client);
           c.onError(
             "E_STREAM_ERROR HTTP response code " + code);
           return;
@@ -323,7 +323,7 @@ import java.util.concurrent.atomic.AtomicInteger;
           this.content_length = this.conn.getContentLength();
           Stream.LOG_STREAM.debug(
             "onRequestInfo: reporting size {}", this.content_length);
-          final AdobeAdeptStreamClientType c = NullCheck.notNull(this.client);
+          final AdobeAdeptStreamClientType c = Objects.requireNonNull(this.client);
           c.onTotalLengthReady((long) this.content_length);
         }
 
@@ -334,7 +334,7 @@ import java.util.concurrent.atomic.AtomicInteger;
       } catch (final IOException e) {
         this.recursion.decrementAndGet();
         Stream.LOG_STREAM.error("i/o error: ", e);
-        final AdobeAdeptStreamClientType c = NullCheck.notNull(this.client);
+        final AdobeAdeptStreamClientType c = Objects.requireNonNull(this.client);
         c.onError("E_STREAM_ERROR " + e.getMessage());
       } finally {
         Stream.LOG_STREAM.debug(
@@ -372,9 +372,9 @@ import java.util.concurrent.atomic.AtomicInteger;
           continue;
         }
 
-        final List<String> values = NullCheck.notNull(headers.get(k));
+        final List<String> values = Objects.requireNonNull(headers.get(k));
         for (int index = 0; index < values.size(); ++index) {
-          final String value = NullCheck.notNull(values.get(index));
+          final String value = Objects.requireNonNull(values.get(index));
 
           /**
            * The reason for this repeated fetching and checking of the client
@@ -385,7 +385,7 @@ import java.util.concurrent.atomic.AtomicInteger;
            * to know about it immediately.
            */
 
-          final AdobeAdeptStreamClientType c = NullCheck.notNull(this.client);
+          final AdobeAdeptStreamClientType c = Objects.requireNonNull(this.client);
           c.onPropertyReady(k, value);
         }
       }

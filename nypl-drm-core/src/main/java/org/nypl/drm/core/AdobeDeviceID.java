@@ -1,6 +1,6 @@
 package org.nypl.drm.core;
 
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 
 /**
  * <p>An Adobe device ID, typically in {@code urn:} form. This is <i>not</i> an
@@ -26,7 +26,7 @@ public final class AdobeDeviceID
   public AdobeDeviceID(
     final String in_value)
   {
-    this.value = NullCheck.notNull(in_value);
+    this.value = Objects.requireNonNull(in_value);
   }
 
   /**

@@ -1,6 +1,6 @@
 package org.nypl.drm.core;
 
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 import com.io7m.jnull.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +28,7 @@ public final class AdobeAdeptContentFilterFactory
   private static @Nullable AdobeAdeptContentFilterType INSTANCE;
 
   static {
-    LOG = NullCheck.notNull(
-      LoggerFactory.getLogger(AdobeAdeptContentFilterFactory.class));
+    LOG = Objects.requireNonNull(LoggerFactory.getLogger(AdobeAdeptContentFilterFactory.class));
 
     CLASS_NAME = "org.nypl.drm.adobe.AdobeAdeptContentFilter";
   }
@@ -61,23 +60,23 @@ public final class AdobeAdeptContentFilterFactory
     final File temporary_dir)
     throws DRMException
   {
-    NullCheck.notNull(package_name);
-    NullCheck.notNull(package_version);
-    NullCheck.notNull(res);
-    NullCheck.notNull(net);
-    NullCheck.notNull(device_serial);
-    NullCheck.notNull(device_name);
-    NullCheck.notNull(app_storage);
-    NullCheck.notNull(xml_storage);
-    NullCheck.notNull(book_path);
-    NullCheck.notNull(temporary_dir);
+    Objects.requireNonNull(package_name);
+    Objects.requireNonNull(package_version);
+    Objects.requireNonNull(res);
+    Objects.requireNonNull(net);
+    Objects.requireNonNull(device_serial);
+    Objects.requireNonNull(device_name);
+    Objects.requireNonNull(app_storage);
+    Objects.requireNonNull(xml_storage);
+    Objects.requireNonNull(book_path);
+    Objects.requireNonNull(temporary_dir);
 
     try {
       if (AdobeAdeptContentFilterFactory.INSTANCE != null) {
         AdobeAdeptContentFilterFactory.LOG.debug(
           "returning saved instance {}",
           AdobeAdeptContentFilterFactory.INSTANCE);
-        return NullCheck.notNull(AdobeAdeptContentFilterFactory.INSTANCE);
+        return Objects.requireNonNull(AdobeAdeptContentFilterFactory.INSTANCE);
       }
 
       AdobeAdeptContentFilterFactory.LOG.debug(
@@ -104,8 +103,7 @@ public final class AdobeAdeptContentFilterFactory
 
       AdobeAdeptContentFilterFactory.LOG.debug(
         "invoking 'get' method on {}", c);
-      final AdobeAdeptContentFilterType instance = NullCheck.notNull(
-        (AdobeAdeptContentFilterType) gm.invoke(
+      final AdobeAdeptContentFilterType instance = Objects.requireNonNull((AdobeAdeptContentFilterType) gm.invoke(
           null,
           package_name,
           package_version,

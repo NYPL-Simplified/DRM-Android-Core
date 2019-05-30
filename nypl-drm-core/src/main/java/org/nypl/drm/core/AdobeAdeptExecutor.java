@@ -1,7 +1,7 @@
 package org.nypl.drm.core;
 
 import android.os.Process;
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 import com.io7m.junreachable.UnreachableCodeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ public final class AdobeAdeptExecutor implements AdobeAdeptExecutorType
   private static final Logger LOG;
 
   static {
-    LOG = NullCheck.notNull(LoggerFactory.getLogger(AdobeAdeptExecutor.class));
+    LOG = Objects.requireNonNull(LoggerFactory.getLogger(AdobeAdeptExecutor.class));
   }
 
   private final ExecutorService         exec;
@@ -35,8 +35,8 @@ public final class AdobeAdeptExecutor implements AdobeAdeptExecutorType
     final ExecutorService in_exec,
     final AdobeAdeptConnectorType in_connector)
   {
-    this.exec = NullCheck.notNull(in_exec);
-    this.connector = NullCheck.notNull(in_connector);
+    this.exec = Objects.requireNonNull(in_exec);
+    this.connector = Objects.requireNonNull(in_connector);
   }
 
   /**
@@ -58,8 +58,8 @@ public final class AdobeAdeptExecutor implements AdobeAdeptExecutorType
     final AdobeAdeptConnectorParameters p)
     throws DRMException, InterruptedException
   {
-    NullCheck.notNull(factory);
-    NullCheck.notNull(p);
+    Objects.requireNonNull(factory);
+    Objects.requireNonNull(p);
 
     final ThreadFactory tf = Executors.defaultThreadFactory();
     final ThreadFactory named = new ThreadFactory()
@@ -80,7 +80,7 @@ public final class AdobeAdeptExecutor implements AdobeAdeptExecutorType
             {
               android.os.Process.setThreadPriority(
                 Process.THREAD_PRIORITY_BACKGROUND);
-              NullCheck.notNull(r).run();
+              Objects.requireNonNull(r).run();
             }
           });
         t.setName("nypl-drm-adobe-task");
@@ -121,7 +121,7 @@ public final class AdobeAdeptExecutor implements AdobeAdeptExecutorType
 
   @Override public void execute(final AdobeAdeptProcedureType p)
   {
-    NullCheck.notNull(p);
+    Objects.requireNonNull(p);
 
     final AdobeAdeptConnectorType c = this.connector;
     this.exec.execute(

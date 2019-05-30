@@ -1,7 +1,7 @@
 package org.nypl.drm.core;
 
 import android.net.Uri;
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 import com.io7m.junreachable.UnreachableCodeException;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,7 +46,7 @@ public final class AdobeAdeptJoinAccountDispatcher
 
   private AdobeAdeptJoinAccountDispatcher(final ExecutorService in_exec)
   {
-    this.exec = NullCheck.notNull(in_exec);
+    this.exec = Objects.requireNonNull(in_exec);
   }
 
   /**
@@ -71,13 +71,13 @@ public final class AdobeAdeptJoinAccountDispatcher
       AdobeAdeptJoinAccountDispatcher.LOG.debug(
         "Parsing decoded json: {}", json);
 
-      final URL url = new URL(NullCheck.notNull(json.getString("url")));
-      final String user = NullCheck.notNull(json.getString("username"));
-      final String password = NullCheck.notNull(json.getString("password"));
-      final String session_id = NullCheck.notNull(json.getString("sessionId"));
+      final URL url = new URL(Objects.requireNonNull(json.getString("url")));
+      final String user = Objects.requireNonNull(json.getString("username"));
+      final String password = Objects.requireNonNull(json.getString("password"));
+      final String session_id = Objects.requireNonNull(json.getString("sessionId"));
       final String current_nonce =
-        NullCheck.notNull(json.getString("currentNonce"));
-      final String locale = NullCheck.notNull(json.getString("locale"));
+        Objects.requireNonNull(json.getString("currentNonce"));
+      final String locale = Objects.requireNonNull(json.getString("locale"));
 
       final Uri.Builder builder = new Uri.Builder();
       builder.appendQueryParameter("username", user);
@@ -243,8 +243,8 @@ public final class AdobeAdeptJoinAccountDispatcher
     final String uri,
     final AdobeAdeptJoinAccountDispatcherListenerType listener)
   {
-    NullCheck.notNull(uri);
-    NullCheck.notNull(listener);
+    Objects.requireNonNull(uri);
+    Objects.requireNonNull(listener);
 
     try {
       Assertions.checkPrecondition(
@@ -252,9 +252,9 @@ public final class AdobeAdeptJoinAccountDispatcher
         "Expected a URI starting with 'adobe:join-form-submit/' (got %s)",
         uri);
 
-      final String data = NullCheck.notNull(uri.substring(23));
+      final String data = Objects.requireNonNull(uri.substring(23));
       final String decoded =
-        NullCheck.notNull(URLDecoder.decode(data, "UTF-8"));
+        Objects.requireNonNull(URLDecoder.decode(data, "UTF-8"));
       final JSONObject json = new JSONObject(decoded);
 
       return this.exec.submit(

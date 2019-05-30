@@ -1,0 +1,2 @@
+include ":nypl-drm-core"
+include ":nypl-drm-core-tests"

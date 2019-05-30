@@ -1,7 +1,7 @@
 package org.nypl.drm.tests.core;
 
-import android.test.InstrumentationTestCase;
 import junit.framework.Assert;
+
 import org.nypl.drm.core.AdobeAdeptFulfillmentToken;
 
 import java.io.InputStream;
@@ -10,15 +10,12 @@ import java.io.InputStream;
  * ACSM fulfillment token tests.
  */
 
-public final class AdobeAdeptFulfillmentTokenTest
-  extends InstrumentationTestCase
-{
+public final class AdobeAdeptFulfillmentTokenTest {
   /**
    * Construct test suite.
    */
 
-  public AdobeAdeptFulfillmentTokenTest()
-  {
+  public AdobeAdeptFulfillmentTokenTest() {
 
   }
 
@@ -29,8 +26,7 @@ public final class AdobeAdeptFulfillmentTokenTest
    */
 
   public void testParse0()
-    throws Exception
-  {
+    throws Exception {
     final InputStream s =
       AdobeAdeptFulfillmentTokenTest.class.getResourceAsStream("valid0.acsm");
 

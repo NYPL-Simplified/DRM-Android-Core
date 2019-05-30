@@ -1,6 +1,6 @@
 package org.nypl.drm.core;
 
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 
 /**
  * <p>An Adobe loan ID, typically in {@code urn:} form. This is an opaque value
@@ -25,7 +25,7 @@ public final class AdobeLoanID
   public AdobeLoanID(
     final String in_value)
   {
-    this.value = NullCheck.notNull(in_value);
+    this.value = Objects.requireNonNull(in_value);
   }
 
   /**

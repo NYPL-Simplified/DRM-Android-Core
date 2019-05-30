@@ -1,6 +1,6 @@
 package org.nypl.drm.core;
 
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -30,8 +30,8 @@ public final class AdobeAdeptFulfillmentAdapter
     final AdobeAdeptFulfillmentListenerType in_listener)
   {
     super(in_log);
-    this.log = NullCheck.notNull(in_log);
-    this.listener = NullCheck.notNull(in_listener);
+    this.log = Objects.requireNonNull(in_log);
+    this.listener = Objects.requireNonNull(in_listener);
   }
 
   @Override public void onDownloadCompleted(

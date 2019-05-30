@@ -1,6 +1,6 @@
 package org.nypl.drm.core;
 
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 
 /**
  * <p>An Adobe vendor ID, typically in {@code urn:} form.</p> <p>For ordinary
@@ -20,7 +20,7 @@ public final class AdobeVendorID
   public AdobeVendorID(
     final String in_value)
   {
-    this.value = NullCheck.notNull(in_value);
+    this.value = Objects.requireNonNull(in_value);
   }
 
   /**

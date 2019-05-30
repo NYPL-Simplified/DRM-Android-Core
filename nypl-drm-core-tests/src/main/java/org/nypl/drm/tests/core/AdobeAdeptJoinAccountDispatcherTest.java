@@ -1,9 +1,11 @@
 package org.nypl.drm.tests.core;
 
 import android.net.Uri;
-import android.test.InstrumentationTestCase;
+
 import com.io7m.junreachable.UnreachableCodeException;
+
 import junit.framework.Assert;
+
 import org.nypl.drm.core.AdobeAdeptJoinAccountDispatcher;
 import org.nypl.drm.core.AdobeAdeptJoinAccountDispatcherListenerType;
 import org.nypl.drm.core.AdobeAdeptJoinAccountDispatcherType;
@@ -19,9 +21,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * Tests for the default join account dispatcher.
  */
 
-public final class AdobeAdeptJoinAccountDispatcherTest
-  extends InstrumentationTestCase
-{
+public final class AdobeAdeptJoinAccountDispatcherTest {
   private static final Logger LOG;
 
   static {
@@ -32,8 +32,7 @@ public final class AdobeAdeptJoinAccountDispatcherTest
    * Construct the test suite.
    */
 
-  public AdobeAdeptJoinAccountDispatcherTest()
-  {
+  public AdobeAdeptJoinAccountDispatcherTest() {
 
   }
 
@@ -44,15 +43,14 @@ public final class AdobeAdeptJoinAccountDispatcherTest
    */
 
   public void testURIParsing()
-    throws Exception
-  {
+    throws Exception {
     final String uri =
       "adobe:join-form-submit/%7B%22url%22%3A%22https%3A%2F%2Fadeactivate"
-      + ".adobe.com%2Fadept%2FJoinAccountsFormSubmit%22%2C%22username%22%3A"
-      + "%22LABS00000013%22%2C%22password%22%3A%226534%22%2C%22sessionId%22"
-      + "%3A%227310fdd40cdf3741bff0355a7aaa7c11d29cd176%22%2C%22currentNonce"
-      + "%22%3A%22b91d53984262bf0234b45a3b7b2addee5e7c6bf1%22%2C%22locale%22"
-      + "%3A%22en%22%7D";
+        + ".adobe.com%2Fadept%2FJoinAccountsFormSubmit%22%2C%22username%22%3A"
+        + "%22LABS00000013%22%2C%22password%22%3A%226534%22%2C%22sessionId%22"
+        + "%3A%227310fdd40cdf3741bff0355a7aaa7c11d29cd176%22%2C%22currentNonce"
+        + "%22%3A%22b91d53984262bf0234b45a3b7b2addee5e7c6bf1%22%2C%22locale%22"
+        + "%3A%22en%22%7D";
 
     final ExecutorService exec = Executors.newFixedThreadPool(1);
     final AdobeAdeptJoinAccountDispatcherType dispatcher =
@@ -62,10 +60,9 @@ public final class AdobeAdeptJoinAccountDispatcherTest
     final CountDownLatch latch = new CountDownLatch(1);
 
     dispatcher.onFormSubmit(
-      uri, new AdobeAdeptJoinAccountDispatcherListenerType()
-      {
-        @Override public void onJoinAccountsException(final Throwable e)
-        {
+      uri, new AdobeAdeptJoinAccountDispatcherListenerType() {
+        @Override
+        public void onJoinAccountsException(final Throwable e) {
           AdobeAdeptJoinAccountDispatcherTest.LOG.debug(
             "exception raised: ",
             e);
@@ -73,8 +70,8 @@ public final class AdobeAdeptJoinAccountDispatcherTest
           throw new UnreachableCodeException();
         }
 
-        @Override public boolean onPreparedQuery(final Uri.Builder builder)
-        {
+        @Override
+        public boolean onPreparedQuery(final Uri.Builder builder) {
           final Uri u = builder.build();
           AdobeAdeptJoinAccountDispatcherTest.LOG.debug("uri: {}", u);
 
@@ -83,14 +80,14 @@ public final class AdobeAdeptJoinAccountDispatcherTest
           return false;
         }
 
-        @Override public void onReceivedHTMLPage(final String text)
-        {
+        @Override
+        public void onReceivedHTMLPage(final String text) {
           latch.countDown();
           throw new UnreachableCodeException();
         }
 
-        @Override public void onReceivedACSM(final String text)
-        {
+        @Override
+        public void onReceivedACSM(final String text) {
           latch.countDown();
           throw new UnreachableCodeException();
         }
@@ -100,8 +97,8 @@ public final class AdobeAdeptJoinAccountDispatcherTest
 
     Assert.assertEquals(
       "username=LABS00000013&password=6534&sessionId"
-      + "=7310fdd40cdf3741bff0355a7aaa7c11d29cd176&currentNonce"
-      + "=b91d53984262bf0234b45a3b7b2addee5e7c6bf1&locale=en&responseType=acsm",
+        + "=7310fdd40cdf3741bff0355a7aaa7c11d29cd176&currentNonce"
+        + "=b91d53984262bf0234b45a3b7b2addee5e7c6bf1&locale=en&responseType=acsm",
       query.get());
   }
 }

@@ -1,6 +1,6 @@
 package org.nypl.drm.core;
 
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 import com.io7m.junreachable.UnreachableCodeException;
 import org.slf4j.Logger;
 
@@ -31,8 +31,8 @@ public final class AdobeAdeptJoinAccountAdapter
     final AdobeAdeptJoinAccountListenerType in_listener)
   {
     super(in_log);
-    this.log = NullCheck.notNull(in_log);
-    this.listener = NullCheck.notNull(in_listener);
+    this.log = Objects.requireNonNull(in_log);
+    this.listener = Objects.requireNonNull(in_listener);
   }
 
   @Override public void onFollowupURL(

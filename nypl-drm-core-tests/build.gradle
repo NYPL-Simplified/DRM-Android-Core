@@ -1,0 +1,5 @@
+dependencies {
+  implementation project(":nypl-drm-core")
+
+  implementation libraries.junit
+}

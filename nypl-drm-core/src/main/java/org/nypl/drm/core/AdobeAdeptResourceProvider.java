@@ -1,6 +1,6 @@
 package org.nypl.drm.core;
 
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 import com.io7m.jnull.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ public final class AdobeAdeptResourceProvider
 
   private AdobeAdeptResourceProvider(final byte[] in_certificate)
   {
-    this.certificate = NullCheck.notNull(in_certificate);
+    this.certificate = Objects.requireNonNull(in_certificate);
   }
 
   /**

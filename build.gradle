@@ -1,0 +1,245 @@
+buildscript {
+  if ("$gradle.gradleVersion" != "5.2.1") {
+    throw new GradleException("Gradle version 5.2.1 is required (received $gradle.gradleVersion)")
+  }
+
+  ext.kotlin_version = "1.3.30"
+
+  repositories {
+    mavenCentral()
+    google()
+    jcenter()
+  }
+
+  dependencies {
+    classpath "com.android.tools.build:gradle:3.4.0"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    classpath "digital.wup:android-maven-publish:3.6.2"
+    classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.20.0"
+    classpath "com.vanniktech:gradle-android-junit-jacoco-plugin:0.13.0"
+    classpath "biz.aQute.bnd:biz.aQute.bnd.gradle:4.2.0"
+  }
+}
+
+plugins {
+  id "ru.vyarus.animalsniffer" version "1.5.0"
+  id "io.codearte.nexus-staging" version "0.20.0"
+  id "com.vanniktech.android.junit.jacoco" version "0.13.0"
+  id "digital.wup.android-maven-publish" version "3.6.2"
+}
+
+ext {
+  androidBuildToolsVersion = "28.0.3"
+  androidCompileSDKVersion = 28
+  androidMinimumSDKVersion = 21
+  androidTargetSDKVersion = 28
+
+  if (!project.hasProperty("nexusUsername")) {
+    logger.warn("No nexusUsername property specified: Using an empty value")
+    nexusUsername = ""
+  }
+  if (!project.hasProperty("nexusPassword")) {
+    logger.warn("No nexusPassword property specified: Using an empty value")
+    nexusPassword = ""
+  }
+}
+
+ext.libraries = [
+  junit       : "junit:junit:4.13-beta-3",
+  junreachable: "com.io7m.junreachable:io7m-junreachable-core:1.0.2",
+  slf4j       : "org.slf4j:slf4j-api:1.7.25",
+]
+
+apply plugin: "io.codearte.nexus-staging"
+apply plugin: "com.vanniktech.android.junit.jacoco"
+
+nexusStaging {
+  packageGroup = "org.librarysimplified"
+  numberOfRetries = 32
+  delayBetweenRetriesInMillis = 2000
+}
+
+allprojects {
+  group = project.ext["GROUP"]
+  version = project.ext["VERSION_NAME"]
+}
+
+subprojects { project ->
+
+  switch (POM_PACKAGING) {
+    case "jar":
+      logger.info("Configuring ${project} (${POM_PACKAGING}) as jar project")
+
+      apply plugin: "java"
+      apply plugin: "java-library"
+      apply plugin: "kotlin"
+
+      /*
+       * Apply the Animal Sniffer plugin to check that code is Android compatible.
+       */
+
+      apply plugin: "ru.vyarus.animalsniffer"
+
+      dependencies {
+        signature "org.codehaus.mojo.signature:java16:1.1@signature"
+        signature "net.sf.androidscents.signature:android-api-level-14:4.0_r4@signature"
+      }
+
+      /*
+       * Build an OSGi bundle.
+       */
+
+      apply plugin: "biz.aQute.bnd.builder"
+
+      jar {
+        bnd """
+Automatic-Module-Name: ${POM_AUTOMATIC_MODULE_NAME}
+
+-removeheaders: Bnd-LastModified, Tool, Private-Package
+"""
+      }
+      break
+
+    case "apk":
+      logger.info("Configuring ${project} (${POM_PACKAGING}) as Android application project")
+
+      apply plugin: "com.android.application"
+      apply plugin: "kotlin-android"
+
+      android {
+        compileSdkVersion androidCompileSDKVersion
+        buildToolsVersion androidBuildToolsVersion
+
+        defaultConfig {
+          minSdkVersion androidMinimumSDKVersion
+          targetSdkVersion androidTargetSDKVersion
+        }
+        compileOptions {
+          sourceCompatibility JavaVersion.VERSION_1_8
+          targetCompatibility JavaVersion.VERSION_1_8
+        }
+      }
+      break
+
+    case "aar":
+      logger.info("Configuring ${project} (${POM_PACKAGING}) as Android library project")
+
+      apply plugin: "com.android.library"
+      apply plugin: "kotlin-android"
+
+      android {
+        compileSdkVersion androidCompileSDKVersion
+        buildToolsVersion androidBuildToolsVersion
+
+        defaultConfig {
+          minSdkVersion androidMinimumSDKVersion
+          targetSdkVersion androidTargetSDKVersion
+          testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        }
+        compileOptions {
+          sourceCompatibility JavaVersion.VERSION_1_8
+          targetCompatibility JavaVersion.VERSION_1_8
+        }
+        testOptions {
+          execution "ANDROID_TEST_ORCHESTRATOR"
+          animationsDisabled = true
+        }
+      }
+      break
+
+    default:
+      throw new IllegalStateException(
+        "Unrecognized packaging type ${POM_PACKAGING} for ${project}")
+  }
+
+  task javadocsJar(type: Jar) {
+    classifier = "javadoc"
+  }
+
+  task sourcesJar(type: Jar) {
+    classifier = "sources"
+    from "src/main/java", "src/main/resources"
+  }
+
+  apply plugin: "digital.wup.android-maven-publish"
+  apply plugin: "signing"
+
+  publishing {
+    publications {
+      basicJar(MavenPublication) {
+
+        switch (POM_PACKAGING) {
+          case "jar":
+            from components.java
+            break
+
+          case "apk":
+            break
+
+          case "aar":
+            from components.android
+            break
+        }
+
+        artifact sourcesJar
+        artifact javadocsJar
+
+        pom {
+          artifactId = POM_ARTIFACT_ID
+          name = POM_NAME
+          packaging = POM_PACKAGING
+          description = POM_DESCRIPTION
+          url = POM_URL
+
+          scm {
+            connection = POM_SCM_CONNECTION
+            developerConnection = POM_SCM_DEV_CONNECTION
+            url = POM_SCM_URL
+          }
+
+          licenses {
+            license {
+              name = POM_LICENCE_NAME
+              url = POM_LICENCE_URL
+            }
+          }
+
+          developers {
+            developer {
+              id = POM_DEVELOPER_ID
+              name = POM_DEVELOPER_NAME
+              email = POM_DEVELOPER_EMAIL
+              url = POM_DEVELOPER_URL
+            }
+          }
+        }
+      }
+    }
+
+    repositories {
+      maven {
+        def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+        def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+        url = version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+
+        credentials(PasswordCredentials) {
+          username nexusUsername
+          password nexusPassword
+        }
+      }
+    }
+  }
+
+  signing {
+    useGpgCmd()
+    sign publishing.publications.basicJar
+  }
+
+  repositories {
+    mavenCentral()
+    mavenLocal()
+    jcenter()
+    google()
+  }
+}
+

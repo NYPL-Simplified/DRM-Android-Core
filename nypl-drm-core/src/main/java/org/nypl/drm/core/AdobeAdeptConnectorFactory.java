@@ -1,6 +1,6 @@
 package org.nypl.drm.core;
 
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 import com.io7m.jnull.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,8 +72,7 @@ public final class AdobeAdeptConnectorFactory
   private static @Nullable AdobeAdeptConnectorType INSTANCE;
 
   static {
-    LOG = NullCheck.notNull(
-      LoggerFactory.getLogger(
+    LOG = Objects.requireNonNull(LoggerFactory.getLogger(
         AdobeAdeptConnectorFactory.class));
 
     CLASS_NAME = "org.nypl.drm.adobe.AdobeAdeptConnector";
@@ -97,13 +96,13 @@ public final class AdobeAdeptConnectorFactory
     final AdobeAdeptConnectorParameters p)
     throws DRMException
   {
-    NullCheck.notNull(p);
+    Objects.requireNonNull(p);
 
     try {
       if (AdobeAdeptConnectorFactory.INSTANCE != null) {
         AdobeAdeptConnectorFactory.LOG.debug(
           "returning saved instance {}", AdobeAdeptConnectorFactory.INSTANCE);
-        return NullCheck.notNull(AdobeAdeptConnectorFactory.INSTANCE);
+        return Objects.requireNonNull(AdobeAdeptConnectorFactory.INSTANCE);
       }
 
       AdobeAdeptConnectorFactory.LOG.debug(
@@ -120,8 +119,7 @@ public final class AdobeAdeptConnectorFactory
         AdobeAdeptConnectorParameters.class);
 
       AdobeAdeptConnectorFactory.LOG.debug("invoking 'get' method on {}", c);
-      final AdobeAdeptConnectorType instance = NullCheck.notNull(
-        (AdobeAdeptConnectorType) gm.invoke(null, p));
+      final AdobeAdeptConnectorType instance = Objects.requireNonNull((AdobeAdeptConnectorType) gm.invoke(null, p));
 
       AdobeAdeptConnectorFactory.INSTANCE = instance;
       AdobeAdeptConnectorFactory.LOG.debug("returning fresh instance");

@@ -35,8 +35,8 @@ $ ./gradlew clean assemble test publish
 
 |Module|Description|
 |------|-----------|
-| [org.librarysimplified.drm.core](https://github.com/NYPL-Simplified/audiobook-android/tree/develop/org.librarysimplified.drm.core) | Core API
-| [org.librarysimplified.drm.core.tests](https://github.com/NYPL-Simplified/audiobook-android/tree/develop/org.librarysimplified.drm.core.tests) | Unit tests
+| [org.librarysimplified.drm.core](https://github.com/NYPL-Simplified/DRM-Android-Core/tree/develop/org.librarysimplified.drm.core) | Core API
+| [org.librarysimplified.drm.core.tests](https://github.com/NYPL-Simplified/DRM-Android-Core/tree/develop/org.librarysimplified.drm.core.tests) | Unit tests
 
 ### License
 

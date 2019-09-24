@@ -3,6 +3,14 @@ DRM-Android-Core
 
 ![drm](./src/site/resources/drm.jpg?raw=true)
 
+### Usage
+
+Add a dependency on the core API:
+
+```
+implementation "org.librarysimplified.drm:org.librarysimplified.drm.core:1.1.0"
+```
+
 ### Compilation
 
 1. Ensure that the location of your Android SDK is specified in `local.properties`.
@@ -35,8 +43,8 @@ $ ./gradlew clean assemble test publish
 
 |Module|Description|
 |------|-----------|
-| [org.librarysimplified.drm.core](https://github.com/NYPL-Simplified/audiobook-android/tree/develop/org.librarysimplified.drm.core) | Core API
-| [org.librarysimplified.drm.core.tests](https://github.com/NYPL-Simplified/audiobook-android/tree/develop/org.librarysimplified.drm.core.tests) | Unit tests
+| [org.librarysimplified.drm.core](https://github.com/NYPL-Simplified/DRM-Android-Core/tree/develop/org.librarysimplified.drm.core) | Core API
+| [org.librarysimplified.drm.core.tests](https://github.com/NYPL-Simplified/DRM-Android-Core/tree/develop/org.librarysimplified.drm.core.tests) | Unit tests
 
 ### License
 

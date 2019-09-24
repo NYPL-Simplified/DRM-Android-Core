@@ -1,0 +1,4 @@
+dependencies {
+  api libraries.slf4j
+  api libraries.junreachable
+}

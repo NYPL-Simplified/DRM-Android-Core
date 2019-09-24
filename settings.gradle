@@ -1,0 +1,2 @@
+include ":org.librarysimplified.drm.core"
+include ":org.librarysimplified.drm.core.tests"

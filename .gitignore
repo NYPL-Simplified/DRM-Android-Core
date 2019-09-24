@@ -1,4 +1,7 @@
+.gradle
 .idea/
+build
 gen
-target
+local.properties
 pom.xml.versionsBackup
+target

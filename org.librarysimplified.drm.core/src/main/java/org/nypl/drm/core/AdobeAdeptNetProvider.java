@@ -192,14 +192,6 @@ import java.util.concurrent.atomic.AtomicInteger;
     {
       Stream.LOG_STREAM.debug("onRequestBytes: {} {}", offset, size);
 
-      Assertions.checkPrecondition(offset >= 0L, "Offset %d >= 0", offset);
-      Assertions.checkPrecondition(
-        offset <= 0xFFFFFFFFL, "Offset %d <= 0xFFFFFFFFL", offset);
-
-      Assertions.checkPrecondition(size >= 0L, "Size %d >= 0", size);
-      Assertions.checkPrecondition(
-        size <= 0xFFFFFFFFL, "Size %d <= 0xFFFFFFFFL", size);
-
       try {
         final byte[] buffer = new byte[4096];
         InputStream is = null;

@@ -3,7 +3,7 @@ DRM-Android-Core
 
 [![Build Status](https://img.shields.io/github/workflow/status/NYPL-Simplified/DRM-Android-Core/Android%20CI%20(Authenticated)?style=flat-square)](https://github.com/NYPL-Simplified/DRM-Android-Core/actions?query=workflow%3A%22Android+CI+%28Authenticated%29%22)
 [![Maven Central](https://img.shields.io/maven-central/v/org.librarysimplified.drm/org.librarysimplified.drm.core?style=flat-square)](https://repo1.maven.org/maven2/org/librarysimplified/drm/)
-[![Maven Central (snapshot)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.librarysimplified/org.librarysimplified.drm.core.svg?style=flat-square)](https://oss.sonatype.org/content/repositories/snapshots/org.librarysimplified/)
+[![Maven Central (snapshot)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.librarysimplified.drm/org.librarysimplified.drm.core.svg?style=flat-square)](https://oss.sonatype.org/content/repositories/snapshots/org.librarysimplified.drm/)
 
 ![drm](./src/site/resources/drm.jpg?raw=true)
 

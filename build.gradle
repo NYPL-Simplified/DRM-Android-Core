@@ -286,3 +286,14 @@ Automatic-Module-Name: ${POM_AUTOMATIC_MODULE_NAME}
   }
 }
 
+/**
+ * Empty tasks called by CI. We don't do this kind of analysis here yet.
+ */
+
+task verifySemanticVersioning {
+
+}
+
+task ktlint {
+
+}

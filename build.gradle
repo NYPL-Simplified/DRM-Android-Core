@@ -1,9 +1,9 @@
 buildscript {
-  if ("$gradle.gradleVersion" != "5.2.1") {
-    throw new GradleException("Gradle version 5.2.1 is required (received $gradle.gradleVersion)")
-  }
+  ext.kotlin_version = '1.4.20'
 
-  ext.kotlin_version = "1.3.30"
+  if ("$gradle.gradleVersion" != "6.7") {
+    throw new GradleException("Gradle version 6.7 is required (received $gradle.gradleVersion)")
+  }
 
   repositories {
     mavenCentral()
@@ -12,12 +12,11 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:3.4.0"
+    classpath "com.android.tools.build:gradle:4.1.2"
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    classpath "digital.wup:android-maven-publish:3.6.2"
-    classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.20.0"
-    classpath "com.vanniktech:gradle-android-junit-jacoco-plugin:0.13.0"
-    classpath "biz.aQute.bnd:biz.aQute.bnd.gradle:4.2.0"
+    classpath "digital.wup:android-maven-publish:3.6.3"
+    classpath "com.vanniktech:gradle-android-junit-jacoco-plugin:0.16.0"
+    classpath "biz.aQute.bnd:biz.aQute.bnd.gradle:5.3.0"
   }
 }
 
@@ -29,39 +28,73 @@ plugins {
 }
 
 ext {
-  androidBuildToolsVersion = "28.0.3"
   androidCompileSDKVersion = 28
   androidMinimumSDKVersion = 21
   androidTargetSDKVersion = 28
 
-  if (!project.hasProperty("nexusUsername")) {
-    logger.warn("No nexusUsername property specified: Using an empty value")
-    nexusUsername = ""
+  if (!project.hasProperty("mavenCentralUsername")) {
+    logger.warn("No mavenCentralUsername property specified: Using an empty value")
+    mavenCentralUsername = ""
   }
-  if (!project.hasProperty("nexusPassword")) {
-    logger.warn("No nexusPassword property specified: Using an empty value")
-    nexusPassword = ""
+  if (!project.hasProperty("mavenCentralPassword")) {
+    logger.warn("No mavenCentralPassword property specified: Using an empty value")
+    mavenCentralPassword = ""
+  }
+
+  if (!project.hasProperty("org.librarysimplified.nexus.depend")) {
+    logger.warn("org.librarysimplified.nexus.depend is not set: We will not depend on artifacts on the NYPL Nexus")
+    useNYPLNexusDepend = false
+  } else {
+    logger.warn("org.librarysimplified.nexus.depend is set: We will depend on artifacts on the NYPL Nexus")
+    useNYPLNexusDepend = true
+  }
+
+  if (project.hasProperty("org.librarysimplified.directory.publish")) {
+    useDirectoryPublishPath = project.property("org.librarysimplified.directory.publish")
+    useDirectoryPublish = true
+    logger.warn("org.librarysimplified.directory.publish is set: We will publish artifacts to ${useDirectoryPublishPath}")
+  } else {
+    logger.warn("org.librarysimplified.directory.publish is not set: We will not publish artifacts to a custom directory")
+    useDirectoryPublish = false
+    useDirectoryPublishPath = null
+  }
+
+  if (project.hasProperty("org.librarysimplified.no_signing")) {
+    disableSigning = true
+    logger.warn("org.librarysimplified.no_signing is set: We will not sign artifacts")
+  } else {
+    disableSigning = false
+    logger.warn("org.librarysimplified.no_signing is not set: We will attempt to sign artifacts")
   }
 }
 
-ext.libraries = [
-  junit       : "junit:junit:4.13-beta-3",
-  junreachable: "com.io7m.junreachable:io7m-junreachable-core:1.0.2",
-  slf4j       : "org.slf4j:slf4j-api:1.7.25",
+ext.versions = [
+  androidx_core_ktx: "1.3.1",
+  junit            : "4.13-beta-3",
+  junreachable     : "1.0.2",
+  r2_shared        : "2.0.0-beta.1",
+  r2_streamer      : "2.0.0-beta.1",
+  slf4j            : "1.7.25",
 ]
 
-apply plugin: "io.codearte.nexus-staging"
-apply plugin: "com.vanniktech.android.junit.jacoco"
+ext.libraries = [
+  androidx_core_ktx: "androidx.core:core-ktx:${versions.androidx_core_ktx}",
+  junit            : "junit:junit:${versions.junit}",
+  junreachable     : "com.io7m.junreachable:io7m-junreachable-core:${versions.junreachable}",
+  kotlin_stdlib    : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
+  r2_shared        : "com.github.readium:r2-shared-kotlin:${versions.r2_shared}",
+  slf4j            : "org.slf4j:slf4j-api:${versions.slf4j}",
+]
 
-nexusStaging {
-  packageGroup = "org.librarysimplified"
-  numberOfRetries = 32
-  delayBetweenRetriesInMillis = 2000
-}
+apply plugin: "com.vanniktech.android.junit.jacoco"
 
 allprojects {
   group = project.ext["GROUP"]
   version = project.ext["VERSION_NAME"]
+
+  repositories {
+    maven { url "https://jitpack.io" }
+  }
 }
 
 subprojects { project ->
@@ -108,7 +141,6 @@ Automatic-Module-Name: ${POM_AUTOMATIC_MODULE_NAME}
 
       android {
         compileSdkVersion androidCompileSDKVersion
-        buildToolsVersion androidBuildToolsVersion
 
         defaultConfig {
           minSdkVersion androidMinimumSDKVersion
@@ -129,7 +161,6 @@ Automatic-Module-Name: ${POM_AUTOMATIC_MODULE_NAME}
 
       android {
         compileSdkVersion androidCompileSDKVersion
-        buildToolsVersion androidBuildToolsVersion
 
         defaultConfig {
           minSdkVersion androidMinimumSDKVersion
@@ -162,7 +193,6 @@ Automatic-Module-Name: ${POM_AUTOMATIC_MODULE_NAME}
   }
 
   apply plugin: "digital.wup.android-maven-publish"
-  apply plugin: "signing"
 
   publishing {
     publications {
@@ -217,22 +247,35 @@ Automatic-Module-Name: ${POM_AUTOMATIC_MODULE_NAME}
     }
 
     repositories {
-      maven {
-        def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-        def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-        url = version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+      if (useDirectoryPublish) {
+        logger.info("using ${useDirectoryPublishPath} for publication")
 
-        credentials(PasswordCredentials) {
-          username nexusUsername
-          password nexusPassword
+        maven {
+          name = "Directory"
+          url = "file://${useDirectoryPublishPath}"
+        }
+      }
+
+      if (version.endsWith("-SNAPSHOT")) {
+        maven {
+          url = "https://oss.sonatype.org/content/repositories/snapshots/"
+          name = "SonatypeSnapshots"
+          credentials(PasswordCredentials) {
+            username mavenCentralUsername
+            password mavenCentralPassword
+          }
         }
       }
     }
   }
 
-  signing {
-    useGpgCmd()
-    sign publishing.publications.basicJar
+  if (!disableSigning) {
+    apply plugin: "signing"
+
+    signing {
+      useGpgCmd()
+      sign publishing.publications.basicJar
+    }
   }
 
   repositories {
@@ -243,3 +286,14 @@ Automatic-Module-Name: ${POM_AUTOMATIC_MODULE_NAME}
   }
 }
 
+/**
+ * Empty tasks called by CI. We don't do this kind of analysis here yet.
+ */
+
+task verifySemanticVersioning {
+
+}
+
+task ktlint {
+
+}

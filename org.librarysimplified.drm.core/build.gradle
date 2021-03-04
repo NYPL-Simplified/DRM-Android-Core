@@ -1,4 +1,9 @@
 dependencies {
   api libraries.slf4j
   api libraries.junreachable
+
+  implementation libraries.androidx_core_ktx
+  implementation libraries.kotlin_stdlib
+  implementation libraries.r2_shared
 }
+

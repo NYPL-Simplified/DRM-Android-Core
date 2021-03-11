@@ -233,12 +233,13 @@ import java.util.concurrent.atomic.AtomicInteger;
             w += r;
           }
 
-          Assertions.checkInvariant(
-            w == this.content_length,
-            "Written bytes %d == %d",
-            w,
-            this.content_length);
-
+          if (this.content_length >= 0) {
+            Assertions.checkInvariant(
+              w == this.content_length,
+              "Written bytes %d == %d",
+              w,
+              this.content_length);
+          }
         } catch (final IOException e) {
           final AdobeAdeptStreamClientType c = Objects.requireNonNull(this.client);
           c.onError(
@@ -311,10 +312,11 @@ import java.util.concurrent.atomic.AtomicInteger;
           return;
         }
 
-        {
-          this.content_length = this.conn.getContentLength();
-          Stream.LOG_STREAM.debug(
-            "onRequestInfo: reporting size {}", this.content_length);
+        this.content_length = this.conn.getContentLength();
+        Stream.LOG_STREAM.debug(
+          "onRequestInfo: reporting size {}", this.content_length);
+
+        if (this.content_length >= 0) {
           final AdobeAdeptStreamClientType c = Objects.requireNonNull(this.client);
           c.onTotalLengthReady((long) this.content_length);
         }

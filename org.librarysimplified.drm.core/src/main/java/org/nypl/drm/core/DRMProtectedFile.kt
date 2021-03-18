@@ -20,5 +20,18 @@ class DRMProtectedFile(
    * The Adobe rights file, assuming there is one.
    */
 
-  val adobeRightsFile: File?
+  val adobeRightsFile: File? = null,
+
+  /**
+   * The Axis license file, assuming there is one.
+   */
+
+  val axisLicense: File? = null,
+
+  /**
+   * The Axis user key file, assuming there is one.
+   */
+
+  val axisUserKey: File? = null,
+
 ) : PublicationAsset by fileAsset

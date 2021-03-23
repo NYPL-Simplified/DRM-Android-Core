@@ -73,8 +73,8 @@ ext.versions = [
   junit            : "4.13-beta-3",
   junreachable     : "1.0.2",
   r2_shared        : "29422a6e",
-  r2_streamer      : "2.0.0-beta.2",
   slf4j            : "1.7.25",
+  nypl_http        : '0.0.21',
 ]
 
 ext.libraries = [
@@ -84,6 +84,7 @@ ext.libraries = [
   kotlin_stdlib    : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
   r2_shared        : "com.github.readium:r2-shared-kotlin:${versions.r2_shared}",
   slf4j            : "org.slf4j:slf4j-api:${versions.slf4j}",
+  nypl_http_api    : "org.librarysimplified.http:org.librarysimplified.http.api:${versions.nypl_http}",
 ]
 
 apply plugin: "com.vanniktech.android.junit.jacoco"

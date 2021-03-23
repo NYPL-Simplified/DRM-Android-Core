@@ -72,8 +72,8 @@ ext.versions = [
   androidx_core_ktx: "1.3.1",
   junit            : "4.13-beta-3",
   junreachable     : "1.0.2",
-  r2_shared        : "2.0.0-beta.1",
-  r2_streamer      : "2.0.0-beta.1",
+  r2_shared        : "29422a6e",
+  r2_streamer      : "2.0.0-beta.2",
   slf4j            : "1.7.25",
 ]
 

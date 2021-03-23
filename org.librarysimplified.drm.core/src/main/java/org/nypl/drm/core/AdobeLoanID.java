@@ -1,5 +1,6 @@
 package org.nypl.drm.core;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Objects;
  * mixing up values when calling functions.</p>
  */
 
-public final class AdobeLoanID
+public final class AdobeLoanID implements Serializable
 {
   private final String value;
 

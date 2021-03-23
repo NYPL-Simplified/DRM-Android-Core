@@ -1,16 +1,16 @@
 package org.nypl.drm.core;
 
+import java.util.Arrays;
 import java.util.Objects;
-
-import java.nio.ByteBuffer;
+import java.io.Serializable;
 
 /**
  * The rights associated with a fulfilled book.
  */
 
-public final class AdobeAdeptLoan
+public final class AdobeAdeptLoan implements Serializable
 {
-  private final ByteBuffer  serialized;
+  private final byte[]      serialized;
   private final boolean     returnable;
   private final AdobeLoanID loan;
 
@@ -24,7 +24,7 @@ public final class AdobeAdeptLoan
 
   public AdobeAdeptLoan(
     final AdobeLoanID in_loan,
-    final ByteBuffer in_serialized,
+    final byte[] in_serialized,
     final boolean in_returnable)
   {
     this.loan = Objects.requireNonNull(in_loan);
@@ -45,7 +45,7 @@ public final class AdobeAdeptLoan
     if (this.isReturnable() != that.isReturnable()) {
       return false;
     }
-    if (!this.getSerialized().equals(that.getSerialized())) {
+    if (!Arrays.equals(this.getSerialized(), that.getSerialized())) {
       return false;
     }
     return this.getID().equals(that.getID());
@@ -55,7 +55,7 @@ public final class AdobeAdeptLoan
   {
     final StringBuilder sb = new StringBuilder("AdobeAdeptLoan{");
     sb.append("loan=").append(this.loan);
-    sb.append(", serialized=").append(this.serialized);
+    sb.append(", serialized=").append(Arrays.toString(this.serialized));
     sb.append(", returnable=").append(this.returnable);
     sb.append('}');
     return sb.toString();
@@ -63,7 +63,7 @@ public final class AdobeAdeptLoan
 
   @Override public int hashCode()
   {
-    int result = this.getSerialized().hashCode();
+    int result = Arrays.hashCode(this.getSerialized());
     result = 31 * result + (this.isReturnable() ? 1 : 0);
     result = 31 * result + this.getID().hashCode();
     return result;
@@ -91,7 +91,7 @@ public final class AdobeAdeptLoan
    * @return The serialized form of the rights
    */
 
-  public ByteBuffer getSerialized()
+  public byte[] getSerialized()
   {
     return this.serialized;
   }

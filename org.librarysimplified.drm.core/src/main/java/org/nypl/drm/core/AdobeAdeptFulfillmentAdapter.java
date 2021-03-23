@@ -45,7 +45,7 @@ public final class AdobeAdeptFulfillmentAdapter
 
     try {
       final AdobeAdeptLoan r = new AdobeAdeptLoan(
-        new AdobeLoanID(loan_id), ByteBuffer.wrap(rights), returnable);
+        new AdobeLoanID(loan_id), rights, returnable);
       this.listener.onFulfillmentSuccess(new File(file), r);
     } catch (final Throwable e) {
       this.log.error("listener raised error: ", e);

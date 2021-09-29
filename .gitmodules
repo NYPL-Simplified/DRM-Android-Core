@@ -1,3 +1,6 @@
 [submodule ".ci"]
 	path = .ci
 	url = https://www.github.com/NYPL-Simplified/Simplified-Android-CI
+[submodule "org.librarysimplified.android.platform"]
+	path = org.librarysimplified.android.platform
+	url = https://github.com/NYPL-Simplified/Simplified-Android-Platform

@@ -1,18 +1,17 @@
 buildscript {
-  ext.kotlin_version = '1.4.20'
+  ext.kotlin_version = '1.5.30'
 
-  if ("$gradle.gradleVersion" != "6.7") {
-    throw new GradleException("Gradle version 6.7 is required (received $gradle.gradleVersion)")
+  if ("$gradle.gradleVersion" != "7.2") {
+    throw new GradleException("Gradle version 7.2 is required (received $gradle.gradleVersion)")
   }
 
   repositories {
     mavenCentral()
     google()
-    jcenter()
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:4.1.2"
+    classpath "com.android.tools.build:gradle:7.0.2"
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     classpath "digital.wup:android-maven-publish:3.6.3"
     classpath "com.vanniktech:gradle-android-junit-jacoco-plugin:0.16.0"
@@ -151,6 +150,9 @@ Automatic-Module-Name: ${POM_AUTOMATIC_MODULE_NAME}
           sourceCompatibility JavaVersion.VERSION_1_8
           targetCompatibility JavaVersion.VERSION_1_8
         }
+        kotlinOptions {
+          jvmTarget = JavaVersion.VERSION_1_8.toString()
+        }
       }
       break
 
@@ -171,6 +173,9 @@ Automatic-Module-Name: ${POM_AUTOMATIC_MODULE_NAME}
         compileOptions {
           sourceCompatibility JavaVersion.VERSION_1_8
           targetCompatibility JavaVersion.VERSION_1_8
+        }
+        kotlinOptions {
+          jvmTarget = JavaVersion.VERSION_1_8.toString()
         }
         testOptions {
           execution "ANDROID_TEST_ORCHESTRATOR"

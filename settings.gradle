@@ -1,2 +1,12 @@
+enableFeaturePreview('VERSION_CATALOGS')
+
+dependencyResolutionManagement {
+  versionCatalogs {
+    libs {
+      from(files("org.librarysimplified.android.platform/build_libraries.toml"))
+    }
+  }
+}
+
 include ":org.librarysimplified.drm.core"
 include ":org.librarysimplified.drm.core.tests"

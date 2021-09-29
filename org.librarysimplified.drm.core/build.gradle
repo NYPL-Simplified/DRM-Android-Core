@@ -1,10 +1,10 @@
 dependencies {
-  api libraries.slf4j
-  api libraries.junreachable
+  api libs.slf4j
+  api libs.io7m.junreachable
 
-  implementation libraries.androidx_core_ktx
-  implementation libraries.kotlin_stdlib
-  implementation libraries.r2_shared
-  implementation libraries.nypl_http_api
+  implementation libs.androidx.core.ktx
+  implementation libs.kotlin.stdlib
+  implementation libs.r2.shared
+  implementation libs.nypl.http.api
 }
 

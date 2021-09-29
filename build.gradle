@@ -1,8 +1,11 @@
 buildscript {
-  ext.kotlin_version = '1.5.30'
-
   if ("$gradle.gradleVersion" != "7.2") {
     throw new GradleException("Gradle version 7.2 is required (received $gradle.gradleVersion)")
+  }
+
+  // https://github.com/gradle/gradle/issues/11308#issuecomment-554317655
+  if (System.properties['org.gradle.internal.publish.checksums.insecure'] != 'true') {
+    throw new GradleException("org.gradle.internal.publish.checksums.insecure must be 'true'")
   }
 
   repositories {
@@ -10,23 +13,29 @@ buildscript {
     google()
   }
 
+  ext.kotlin_version = "1.5.30"
+
   dependencies {
-    classpath "com.android.tools.build:gradle:7.0.2"
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    classpath "digital.wup:android-maven-publish:3.6.3"
-    classpath "com.vanniktech:gradle-android-junit-jacoco-plugin:0.16.0"
     classpath "biz.aQute.bnd:biz.aQute.bnd.gradle:5.3.0"
+    classpath "com.vanniktech:gradle-android-junit-jacoco-plugin:0.16.0"
+    classpath "digital.wup:android-maven-publish:3.6.3"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    classpath "com.android.tools.build:gradle:7.0.2"
+    classpath "de.undercouch:gradle-download-task:4.1.2"
+    classpath "de.mannodermaus.gradle.plugins:android-junit5:1.8.0.0"
   }
 }
 
 plugins {
-  id "ru.vyarus.animalsniffer" version "1.5.0"
-  id "io.codearte.nexus-staging" version "0.20.0"
-  id "com.vanniktech.android.junit.jacoco" version "0.13.0"
-  id "digital.wup.android-maven-publish" version "3.6.2"
+  id "com.github.ben-manes.versions" version "0.33.0"
+  id "com.vanniktech.android.junit.jacoco" version "0.16.0"
+  id "ru.vyarus.animalsniffer" version "1.5.1"
+  id "ca.cutterslade.analyze" version "1.4.3"
+  id "maven-publish"
 }
 
 ext {
+  androidBuildToolsVersion = "30.0.2"
   androidCompileSDKVersion = 28
   androidMinimumSDKVersion = 21
   androidTargetSDKVersion = 28
@@ -38,14 +47,6 @@ ext {
   if (!project.hasProperty("mavenCentralPassword")) {
     logger.warn("No mavenCentralPassword property specified: Using an empty value")
     mavenCentralPassword = ""
-  }
-
-  if (!project.hasProperty("org.librarysimplified.nexus.depend")) {
-    logger.warn("org.librarysimplified.nexus.depend is not set: We will not depend on artifacts on the NYPL Nexus")
-    useNYPLNexusDepend = false
-  } else {
-    logger.warn("org.librarysimplified.nexus.depend is set: We will depend on artifacts on the NYPL Nexus")
-    useNYPLNexusDepend = true
   }
 
   if (project.hasProperty("org.librarysimplified.directory.publish")) {
@@ -67,41 +68,22 @@ ext {
   }
 }
 
-ext.versions = [
-  androidx_core_ktx: "1.3.1",
-  junit            : "4.13-beta-3",
-  junreachable     : "1.0.2",
-  r2_shared        : "29422a6e",
-  slf4j            : "1.7.25",
-  nypl_http        : '0.0.21',
-]
-
-ext.libraries = [
-  androidx_core_ktx: "androidx.core:core-ktx:${versions.androidx_core_ktx}",
-  junit            : "junit:junit:${versions.junit}",
-  junreachable     : "com.io7m.junreachable:io7m-junreachable-core:${versions.junreachable}",
-  kotlin_stdlib    : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
-  r2_shared        : "com.github.readium:r2-shared-kotlin:${versions.r2_shared}",
-  slf4j            : "org.slf4j:slf4j-api:${versions.slf4j}",
-  nypl_http_api    : "org.librarysimplified.http:org.librarysimplified.http.api:${versions.nypl_http}",
-]
-
 apply plugin: "com.vanniktech.android.junit.jacoco"
+apply plugin: "de.undercouch.download"
 
-allprojects {
+allprojects { project ->
   group = project.ext["GROUP"]
   version = project.ext["VERSION_NAME"]
 
-  repositories {
-    maven { url "https://jitpack.io" }
-  }
+  apply plugin: 'ca.cutterslade.analyze'
 }
 
+// Configure all projects
 subprojects { project ->
 
   switch (POM_PACKAGING) {
     case "jar":
-      logger.info("Configuring ${project} (${POM_PACKAGING}) as jar project")
+      logger.info("Configuring ${project} ${version} (${POM_PACKAGING}) as jar project")
 
       apply plugin: "java"
       apply plugin: "java-library"
@@ -115,7 +97,7 @@ subprojects { project ->
 
       dependencies {
         signature "org.codehaus.mojo.signature:java16:1.1@signature"
-        signature "net.sf.androidscents.signature:android-api-level-14:4.0_r4@signature"
+        signature "net.sf.androidscents.signature:android-api-level-21:5.0.1_r2@signature"
       }
 
       /*
@@ -134,19 +116,21 @@ Automatic-Module-Name: ${POM_AUTOMATIC_MODULE_NAME}
       break
 
     case "apk":
-      logger.info("Configuring ${project} (${POM_PACKAGING}) as Android application project")
+      logger.info("Configuring ${project} ${version} (${POM_PACKAGING}) as Android application project")
 
       apply plugin: "com.android.application"
       apply plugin: "kotlin-android"
 
       android {
         compileSdkVersion androidCompileSDKVersion
+        buildToolsVersion androidBuildToolsVersion
 
         defaultConfig {
           minSdkVersion androidMinimumSDKVersion
           targetSdkVersion androidTargetSDKVersion
         }
         compileOptions {
+          encoding 'UTF-8'
           sourceCompatibility JavaVersion.VERSION_1_8
           targetCompatibility JavaVersion.VERSION_1_8
         }
@@ -157,20 +141,24 @@ Automatic-Module-Name: ${POM_AUTOMATIC_MODULE_NAME}
       break
 
     case "aar":
-      logger.info("Configuring ${project} (${POM_PACKAGING}) as Android library project")
+      logger.info("Configuring ${project} ${version} (${POM_PACKAGING}) as Android library project")
 
       apply plugin: "com.android.library"
       apply plugin: "kotlin-android"
+      apply plugin: "de.mannodermaus.android-junit5"
 
       android {
         compileSdkVersion androidCompileSDKVersion
+        buildToolsVersion androidBuildToolsVersion
 
         defaultConfig {
           minSdkVersion androidMinimumSDKVersion
           targetSdkVersion androidTargetSDKVersion
-          testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+          testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+          useLibrary 'org.apache.http.legacy'
         }
         compileOptions {
+          encoding 'UTF-8'
           sourceCompatibility JavaVersion.VERSION_1_8
           targetCompatibility JavaVersion.VERSION_1_8
         }
@@ -178,8 +166,18 @@ Automatic-Module-Name: ${POM_AUTOMATIC_MODULE_NAME}
           jvmTarget = JavaVersion.VERSION_1_8.toString()
         }
         testOptions {
-          execution "ANDROID_TEST_ORCHESTRATOR"
-          animationsDisabled = true
+          junitPlatform {
+            releaseFilters {
+              excludePattern "**/**"
+            }
+          }
+          unitTests.includeAndroidResources = true
+          unitTests.all {
+            reports {
+              junitXml.enabled = true
+              html.enabled = true
+            }
+          }
         }
       }
       break
@@ -189,117 +187,53 @@ Automatic-Module-Name: ${POM_AUTOMATIC_MODULE_NAME}
         "Unrecognized packaging type ${POM_PACKAGING} for ${project}")
   }
 
-  task javadocsJar(type: Jar) {
-    classifier = "javadoc"
-  }
+  /*
+   * Configure publishing for the various project types.
+   */
 
-  task sourcesJar(type: Jar) {
-    classifier = "sources"
-    from "src/main/java", "src/main/resources"
-  }
+  switch (POM_PACKAGING) {
+    case "jar":
+      apply from: file("$rootDir/build_publishing.gradle")
+      break
 
-  apply plugin: "digital.wup.android-maven-publish"
+    case "apk":
+      break
 
-  publishing {
-    publications {
-      basicJar(MavenPublication) {
+    case "aar":
+      apply from: file("$rootDir/build_publishing.gradle")
+      break
 
-        switch (POM_PACKAGING) {
-          case "jar":
-            from components.java
-            break
-
-          case "apk":
-            break
-
-          case "aar":
-            from components.android
-            break
-        }
-
-        artifact sourcesJar
-        artifact javadocsJar
-
-        pom {
-          artifactId = POM_ARTIFACT_ID
-          name = POM_NAME
-          packaging = POM_PACKAGING
-          description = POM_DESCRIPTION
-          url = POM_URL
-
-          scm {
-            connection = POM_SCM_CONNECTION
-            developerConnection = POM_SCM_DEV_CONNECTION
-            url = POM_SCM_URL
-          }
-
-          licenses {
-            license {
-              name = POM_LICENCE_NAME
-              url = POM_LICENCE_URL
-            }
-          }
-
-          developers {
-            developer {
-              id = POM_DEVELOPER_ID
-              name = POM_DEVELOPER_NAME
-              email = POM_DEVELOPER_EMAIL
-              url = POM_DEVELOPER_URL
-            }
-          }
-        }
-      }
-    }
-
-    repositories {
-      if (useDirectoryPublish) {
-        logger.info("using ${useDirectoryPublishPath} for publication")
-
-        maven {
-          name = "Directory"
-          url = "file://${useDirectoryPublishPath}"
-        }
-      }
-
-      if (version.endsWith("-SNAPSHOT")) {
-        maven {
-          url = "https://oss.sonatype.org/content/repositories/snapshots/"
-          name = "SonatypeSnapshots"
-          credentials(PasswordCredentials) {
-            username mavenCentralUsername
-            password mavenCentralPassword
-          }
-        }
-      }
-    }
-  }
-
-  if (!disableSigning) {
-    apply plugin: "signing"
-
-    signing {
-      useGpgCmd()
-      sign publishing.publications.basicJar
-    }
+    default:
+      throw new IllegalStateException(
+        "Unrecognized packaging type ${POM_PACKAGING} for ${project}")
   }
 
   repositories {
-    mavenCentral()
     mavenLocal()
-    jcenter()
+    mavenCentral()
     google()
+
+    // Sonatype snapshots
+    maven {
+      url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
+
+    maven { url "https://jitpack.io" }
   }
 }
 
 /**
- * Empty tasks called by CI. We don't do this kind of analysis here yet.
+ * An empty task called by CI. We don't do semantic versioning analysis here yet.
  */
 
-task verifySemanticVersioning {
+task verifySemanticVersioning {}
 
-}
+/*
+ * Add ktlint tasks.
+ */
 
-task ktlint {
+apply from: file("$rootDir/build_ktlint.gradle")
 
+subprojects {
+  assemble.dependsOn ktlint
 }

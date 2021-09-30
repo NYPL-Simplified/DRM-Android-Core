@@ -24,6 +24,14 @@ implementation "org.librarysimplified.drm:org.librarysimplified.drm.core:1.1.0"
 
 ### Compilation
 
+Make sure you clone this repository with `git clone --recursive`. 
+If you forgot to use `--recursive`, then execute:
+
+```
+$ git submodule init
+$ git submodule update --remote --recursive
+```
+
 1. Ensure that the location of your Android SDK is specified in `local.properties`.
    For example:
 

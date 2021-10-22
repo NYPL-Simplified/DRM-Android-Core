@@ -1,0 +1,8 @@
+--branch
+develop
+--repository
+.git
+--project
+NYPL-Simplified/DRM-Android-Core
+--formatter
+slack

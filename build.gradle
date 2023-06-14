@@ -1,6 +1,6 @@
 buildscript {
-  if ("$gradle.gradleVersion" != "7.2") {
-    throw new GradleException("Gradle version 7.2 is required (received $gradle.gradleVersion)")
+  if ("$gradle.gradleVersion" != "7.4.2") {
+    throw new GradleException("Gradle version 7.4.2 is required (received $gradle.gradleVersion)")
   }
 
   // https://github.com/gradle/gradle/issues/11308#issuecomment-554317655
